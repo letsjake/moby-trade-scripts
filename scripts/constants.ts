@@ -83,7 +83,7 @@ const VARS_MATRIX = {
 } as any;
 
 const MOBY_BACKEND_APIS = {
-  CURRENT_POSITION: "https://ikbdfwmzl6.execute-api.ap-northeast-2.amazonaws.com/default/moby-prod-query",
+  CURRENT_POSITION: "https://api.moby.trade/v1/account/positions",
   MARKET_DATA: "https://moby-data.s3.ap-northeast-2.amazonaws.com/market-data.json",
 };
 

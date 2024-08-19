@@ -30,7 +30,7 @@ async function fetchMarketData() {
 async function _fetchUserPositions(account: string) {
   try {
     const response = await axios.get(
-      `${MOBY_BACKEND_APIS.CURRENT_POSITION}?method=getMyPositions&address=${account}`
+      `${MOBY_BACKEND_APIS.CURRENT_POSITION}/${account}`
     );
     return response.data;
   } catch (error) {
