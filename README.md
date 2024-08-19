@@ -72,7 +72,12 @@ In close script, The value of amount(`-a`) flag is the amount of contract. The d
 
 Once more, it doesn't need to be given payment(`-p`) flag when closing position.
 
-If you want to close the position of BTC-3JUL24-61250-P, buy put option with 0.01 contracts:
+If you want to close the position of `BTC-3JUL24-61250-P`, buy put option with 0.01 contracts:
 ```bash
 ts-node scripts/trade.ts -c -i BTC-3JUL24-61250-P --buy --put --naked -a 0.01
+```
+
+If you want to close all position of corresponding instrument, you can use `all` option to `-a`  at following command:
+```bash
+ts-node scripts/trade.ts -c -i BTC-3JUL24-61250-P --buy --put --combo -a all --pair 60500
 ```
