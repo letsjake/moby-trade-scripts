@@ -121,6 +121,7 @@ async function createOptionPosition(props: any) {
         args: props.args,
         optionTokenId,
         instrument,
+        account: await props.signer.getAddress()
       },
     );
   } else {

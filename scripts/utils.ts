@@ -156,6 +156,30 @@ async function getOptionTokenId(props: any) {
   }
 }
 
+async function getCurrentOpenPositionSizeByOptionTokenId(
+  account: string,
+  instrument: string,
+  optionTokenId: string
+) {
+  const data = await _fetchUserPositions(account);
+  const underlyingAsset = instrument.split("-")[0];
+
+  const positions = data[underlyingAsset].flatMap((item: any) => {
+    return item.positions.filter((position: any) => {
+      return position.optionTokenId == optionTokenId
+    })
+  });
+
+  if (positions.length > 0) {
+    const position = positions[0]; // Assuming you want the first match
+    const sizeOpened = BigInt(position.sizeOpened) || BigInt(0);
+    const sizeClosed = BigInt(position.sizeClosed) || BigInt(0);
+    return sizeOpened - sizeClosed;
+  }
+
+  return 0; // Default if no matching optionTokenId is found
+}
+
 /*********
 OPTION-RELATED FUNCTIONS
 **********/
@@ -257,7 +281,13 @@ async function closeOptionPosition(
   const underlyingAsset = 'W' + props.instrument.split("-")[0].toUpperCase();
   const underlyingAssetIndex = underlyingAsset === "WBTC" ? 1 : 2; // 1: BTC, 2: ETH
   const optionTokenId = props.optionTokenId;
-  const size = ethers.parseUnits(props.args.amount, underlyingAssetIndex === 1 ? 8 : 18); // amount of option contract to close
+  let size;
+  if (props.args.amount == "all") {
+    size = BigInt(await getCurrentOpenPositionSizeByOptionTokenId(
+      props.account, props.instrument, optionTokenId));
+  } else {
+    size = ethers.parseUnits(props.args.amount, 18); // amount of option contract to close
+  }
   const path = [
     props.args.sell && props.args.call && props.args.naked ?
     CA[underlyingAsset] : 
