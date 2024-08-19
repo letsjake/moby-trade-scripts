@@ -29,6 +29,7 @@ async function fetchMarketData() {
 
 async function _fetchUserPositions(account: string) {
   try {
+    console.log(`${MOBY_BACKEND_APIS.CURRENT_POSITION}/${account}`);
     const response = await axios.get(
       `${MOBY_BACKEND_APIS.CURRENT_POSITION}/${account}`
     );
@@ -105,8 +106,8 @@ async function getOptionTokenId(props: any) {
   );
   const underlyingAsset = props.targetInstrument.split("-")[0];
 
-  const positions = optionTokenIds[underlyingAsset][0].positions.map(
-    (position: any) => {
+  const positions  = optionTokenIds[underlyingAsset].flatMap((item: any) => {
+    return item.positions.map((position: any) => {
       return {
         optionTokenId: position.optionTokenId,
         optionNames: position.optionNames,
@@ -119,8 +120,8 @@ async function getOptionTokenId(props: any) {
         strikePrices: position.strikePrices,
         isCalls: position.isCalls,
       };
-    }
-  );
+    });
+  });
 
   if (props.args.naked) {
     const optionTokenId = positions
@@ -252,6 +253,7 @@ async function openOptionPosition(
 async function closeOptionPosition(
   props: any, 
 ) {
+  // console.log(JSON.stringify(props, null, 2));
   const underlyingAsset = 'W' + props.instrument.split("-")[0].toUpperCase();
   const underlyingAssetIndex = underlyingAsset === "WBTC" ? 1 : 2; // 1: BTC, 2: ETH
   const optionTokenId = props.optionTokenId;
