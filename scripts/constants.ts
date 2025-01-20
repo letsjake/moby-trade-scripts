@@ -84,7 +84,7 @@ const VARS_MATRIX = {
 
 const MOBY_BACKEND_APIS = {
   CURRENT_POSITION: "https://api.moby.trade/v1/account/positions",
-  MARKET_DATA: "https://moby-data.s3.ap-northeast-2.amazonaws.com/market-data.json",
+  MARKET_DATA: "https://api.moby.trade/v1/market/all",
 };
 
 export {
